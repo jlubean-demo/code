@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Change markup on width change</title>
+</head>
+<body>
+<script type="text/javascript" src="../js/lib/matchMedia.js"></script>
+<script type="text/javascript" src="../js/lib/matchMedia.addListener.js"></script>
+<script type="text/javascript" src="../js/lib/handlebars.js"></script>
+<script id="size-template" type="text/x-handlebars-template">
+	<h1>The orientation is {{orientation}} (using matchMedia polyfill).</h1>
+</script>
+<div id="results"/>
+<script>
+	(function() {
+
+    //Uses matchMedia polyfill (https://github.com/paulirish/matchMedia.js and https://github.com/paulirish/matchMedia.js/master/matchMedia.addListener.js) and Handlebars
+
+		var template = Handlebars.compile(document.getElementById('size-template').innerHTML);
+		var results = document.getElementById("results");
+
+		var query = window.matchMedia("screen and (orientation: portrait)");
+		query.addListener(function(q) {
+			if(q.matches)
+				handleChange("portrait");
+			else
+				handleChange("landscape");
+		});
+
+		/* update the DOM when the matching media query changes. Fires both when the query matches and when it stops matching. */
+		function handleChange(ornttn){
+			results.innerHTML = template({orientation: ornttn});
+		}
+
+		handleChange("unknown");
+
+	})();
+</script>
+
+</body>
+</html>
